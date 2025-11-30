@@ -60,7 +60,7 @@ DataStore: preferencias locales, tokens, banderas de sesión.
 
 Room Database: almacenamiento estructurado de viajes y reservas.
 
-Backend: autenticación, sincronización y pagos.
+Supabase: autenticación, base de datos y reglas de seguridad.
 
 Todo el flujo garantiza un manejo coherente de estado, validaciones instantáneas y persistencia entre sesiones.
 
@@ -114,11 +114,21 @@ Publicación en Google Play, impulsando el turismo sostenible mediante tecnolog�
    - Clonar este repositorio.
    - Abrir en Android Studio y esperar la sincronización de Gradle.
 
-3. **Ejecutar (Debug):**
-   - Seleccionar la configuración `app` y ejecutar en un emulador o dispositivo físico.
-   - No se requieren claves especiales para la versión Debug.
+3. **Configuración de Backend (Supabase):**
+   - El proyecto utiliza **Supabase** para autenticación y base de datos.
+   - **IMPORTANTE:** Las credenciales se gestionan de forma segura y NO están en el código fuente.
+   - Debes agregar tus claves en el archivo `local.properties` (en la raíz del proyecto):
+     ```properties
+     SUPABASE_URL=https://tu-proyecto.supabase.co
+     SUPABASE_KEY=tu-anon-key-jwt
+     ```
+   - El proyecto leerá estas variables automáticamente al compilar.
 
-4. **Generar Release (Opcional):**
+4. **Ejecutar (Debug):**
+   - Seleccionar la configuración `app` y ejecutar en un emulador o dispositivo físico.
+   - La app se conectará automáticamente a la instancia de Supabase configurada.
+
+5. **Generar Release (Opcional):**
    - Se requiere el archivo `release-key.jks` y `keystore.properties` (no incluidos en el repositorio por seguridad).
    - Consultar `deployment_guide.md` para más detalles.
 

@@ -47,8 +47,9 @@ class RegistrationViewModel(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val hashedPassword = hashPassword(uiState.value.password)
-            val success = userRepository.register(uiState.value.username, hashedPassword)
+            _uiState.update { it.copy(isLoading = true) }
+            // Supabase expects raw password
+            val success = userRepository.register(uiState.value.username, uiState.value.password)
             
             if (success) {
                  userPreferencesRepository.saveUserData("2", uiState.value.username) // Mock ID

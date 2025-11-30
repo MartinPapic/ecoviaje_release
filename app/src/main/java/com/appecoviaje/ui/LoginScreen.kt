@@ -50,7 +50,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = loginUiState.username,
             onValueChange = { username -> loginViewModel.onUsernameChange(username) },
-            label = { Text("Nombre Usuario") },
+            label = { Text("Correo electrónico") },
             isError = loginUiState.errorMessage.isNotEmpty()
         )
         Spacer(modifier = Modifier.height(8.dp))

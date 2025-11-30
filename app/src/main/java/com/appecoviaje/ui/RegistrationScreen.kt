@@ -48,7 +48,7 @@ fun RegistrationScreen(
         OutlinedTextField(
             value = registrationUiState.username,
             onValueChange = { username -> registrationViewModel.onUsernameChange(username) },
-            label = { Text("Nombre de usuario") },
+            label = { Text("Correo electrónico") },
             isError = registrationUiState.errorMessage.isNotEmpty()
         )
         Spacer(modifier = Modifier.height(8.dp))

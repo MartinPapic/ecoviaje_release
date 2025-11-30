@@ -8,19 +8,20 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
-    @GET("trips")
+    @GET("rest/v1/trips?select=*")
     suspend fun getTrips(): List<Trip>
 
-    @POST("reservations")
+    @POST("rest/v1/reservations")
     suspend fun createReservation(@Body reservation: Reservation): Response<Unit>
 
-    @POST("login")
+    @POST("auth/v1/token?grant_type=password")
     suspend fun login(@Body loginRequest: LoginRequest): Response<AuthResponse>
 
-    @POST("register")
+    @POST("auth/v1/signup")
     suspend fun register(@Body registerRequest: RegisterRequest): Response<AuthResponse>
 }
 
-data class LoginRequest(val username: String, val passwordHash: String)
-data class RegisterRequest(val username: String, val passwordHash: String)
-data class AuthResponse(val token: String, val userId: Int, val username: String)
+data class LoginRequest(val email: String, val password: String)
+data class RegisterRequest(val email: String, val password: String)
+data class AuthResponse(val access_token: String, val user: UserDto?)
+data class UserDto(val id: String, val email: String?)

@@ -10,26 +10,34 @@ class UserRepository(private val userDao: UserDao, private val apiService: ApiSe
         userDao.insert(user)
     }
 
-    suspend fun register(username: String, passwordHash: String): Boolean {
+    suspend fun login(username: String, passwordHash: String): Boolean {
         return try {
-            val response = apiService.register(RegisterRequest(username, passwordHash))
+            // Supabase requires email, we'll assume username is email for now or append a fake domain if needed
+            // For this migration, let's assume the user enters an email.
+            val response = apiService.login(LoginRequest(email = username, password = passwordHash))
             if (response.isSuccessful && response.body() != null) {
-                // Save locally on success
-                userDao.insert(User(username = username, passwordHash = passwordHash))
+                val authData = response.body()!!
+                // Save token if needed
                 true
             } else {
+                android.util.Log.e("UserRepository", "Login failed: ${response.errorBody()?.string()}")
                 false
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }
 
-    suspend fun login(username: String, passwordHash: String): Boolean {
+    suspend fun register(username: String, passwordHash: String): Boolean {
         return try {
-            val response = apiService.login(LoginRequest(username, passwordHash))
-            response.isSuccessful && response.body() != null
+            val response = apiService.register(RegisterRequest(email = username, password = passwordHash))
+            if (!response.isSuccessful) {
+                android.util.Log.e("UserRepository", "Register failed: ${response.errorBody()?.string()}")
+            }
+            response.isSuccessful
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }

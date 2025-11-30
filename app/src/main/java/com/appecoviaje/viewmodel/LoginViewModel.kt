@@ -46,8 +46,9 @@ class LoginViewModel(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val hashedPassword = hashPassword(uiState.value.password)
-            val success = userRepository.login(uiState.value.username, hashedPassword)
+            _uiState.update { it.copy(isLoading = true) }
+            // Supabase expects raw password
+            val success = userRepository.login(uiState.value.username, uiState.value.password)
             
             if (success) {
                 // Fetch user details locally or from response (here we assume local sync or just use username)
