@@ -228,9 +228,12 @@ fun TripPlanningScreen(
                             distanceString = "A $distanceInKm km de distancia"
                         }
 
+                        val weatherText = uiState.weatherData[trip.id] ?: "Cargando clima..."
+
                         TripItem(
                             trip = trip, 
                             distanceText = distanceString,
+                            weatherText = weatherText,
                             onFavoriteClick = { tripPlanningViewModel.toggleFavorite(trip) },
                             onRouteClick = {
                                 val gmmIntentUri = android.net.Uri.parse("geo:0,0?q=${android.net.Uri.encode(trip.location)}")
@@ -252,7 +255,7 @@ fun TripPlanningScreen(
 }
 
 @Composable
-fun TripItem(trip: Trip, distanceText: String, onFavoriteClick: () -> Unit, onRouteClick: () -> Unit, modifier: Modifier = Modifier) {
+fun TripItem(trip: Trip, distanceText: String, weatherText: String, onFavoriteClick: () -> Unit, onRouteClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -282,7 +285,10 @@ fun TripItem(trip: Trip, distanceText: String, onFavoriteClick: () -> Unit, onRo
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Ubicación: ${trip.location}", style = MaterialTheme.typography.bodySmall)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = distanceText, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                    Text(text = distanceText, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(text = "🌡️ $weatherText", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = onRouteClick,
@@ -312,6 +318,6 @@ fun TripPlanningScreenPreview() {
             category = "Montaña",
             isFavorite = true
         )
-        TripItem(trip = sampleTrip, distanceText = "A 2500 km de distancia", onFavoriteClick = {}, onRouteClick = {})
+        TripItem(trip = sampleTrip, distanceText = "A 2500 km de distancia", weatherText = "15°C", onFavoriteClick = {}, onRouteClick = {})
     }
 }

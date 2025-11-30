@@ -35,6 +35,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
         val experienceRepository = ExperienceRepository(database.experienceDao())
         val reservationRepository = ReservationRepository(database.reservationDao())
         val userRepository = UserRepository(database.userDao(), com.appecoviaje.network.RetrofitClient.instance)
+        val weatherRepository = com.appecoviaje.data.WeatherRepository(com.appecoviaje.network.RetrofitClient.weatherInstance)
 
         @Suppress("UNCHECKED_CAST")
         return when {
@@ -43,7 +44,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
             modelClass.isAssignableFrom(RegistrationViewModel::class.java) ->
                 RegistrationViewModel(userPreferencesRepository, userRepository) as T
             modelClass.isAssignableFrom(TripPlanningViewModel::class.java) ->
-                TripPlanningViewModel(tripRepository) as T
+                TripPlanningViewModel(tripRepository, weatherRepository) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) ->
                 SettingsViewModel(userPreferencesRepository) as T
             modelClass.isAssignableFrom(ExperienceViewModel::class.java) ->

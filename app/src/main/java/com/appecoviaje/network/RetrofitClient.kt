@@ -26,4 +26,13 @@ object RetrofitClient {
 
         retrofit.create(ApiService::class.java)
     }
+
+    val weatherInstance: WeatherApiService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.open-meteo.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(WeatherApiService::class.java)
+    }
 }
