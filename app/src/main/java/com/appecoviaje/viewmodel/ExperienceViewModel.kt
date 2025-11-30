@@ -19,6 +19,16 @@ class ExperienceViewModel(
     private val _selectedTripId = MutableStateFlow<Int?>(null)
     val selectedTripId: StateFlow<Int?> = _selectedTripId
 
+    init {
+        viewModelScope.launch {
+            userPreferencesRepository.lastSelectedTripId.collect { savedTripId ->
+                if (_selectedTripId.value == null && savedTripId != null) {
+                    _selectedTripId.value = savedTripId
+                }
+            }
+        }
+    }
+
     val experiences: StateFlow<List<Experience>> = selectedTripId
         .flatMapLatest { tripId ->
             if (tripId != null) {
@@ -42,6 +52,9 @@ class ExperienceViewModel(
 
     fun setSelectedTripId(tripId: Int) {
         _selectedTripId.value = tripId
+        viewModelScope.launch {
+            userPreferencesRepository.setLastSelectedTripId(tripId)
+        }
     }
 
     fun addExperience(comment: String, rating: Int, photoUri: String?) {

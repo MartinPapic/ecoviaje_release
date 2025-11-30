@@ -41,4 +41,17 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
             settings[DARK_MODE] = darkMode
         }
     }
+
+    private val LAST_SELECTED_TRIP_ID = androidx.datastore.preferences.core.intPreferencesKey("last_selected_trip_id")
+
+    val lastSelectedTripId: Flow<Int?> = dataStore.data
+        .map { preferences ->
+            preferences[LAST_SELECTED_TRIP_ID]
+        }
+
+    suspend fun setLastSelectedTripId(tripId: Int) {
+        dataStore.edit { settings ->
+            settings[LAST_SELECTED_TRIP_ID] = tripId
+        }
+    }
 }
